@@ -1,5 +1,5 @@
 import { Grid, GridItem, Show } from "@chakra-ui/react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import GenreList from "./components/GenreList";
 import { useEffect, useState } from "react";
@@ -8,11 +8,12 @@ import GamesBody from "./components/GamesBody";
 import genres from "./data/genres";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import { FormData } from "./components/Register";
 
-// Define interfaces for data structures
 export interface Genre {
   id: number;
   name: string;
+  slug: string;
   image_background: string;
 }
 
@@ -27,42 +28,84 @@ export interface Game {
   name: string;
   background_image: string;
   parent_platforms: { platform: Platform }[];
+  genres: Genre [];
   metacritic: number;
   rating_top: number;
 }
+
+
 
 export function App() {
   // State variables to hold data and loading/error states
   const [data, setData] = useState<Game[]>([]);
   const [error, setError] = useState<any>();
   const [isLoading, setLoading] = useState<boolean>(false);
-  // const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState<string>(""); // Define searchQuery state
+  const [selectedGenre, setSelectedGenre] = useState<string>("");
+  const [selectedPlatform, setSelectedPlatform] = useState<string>("");
+  const [filteredData, setFilteredData] = useState<Game[]>([]);
+  const [isLoggedIn, setLoginInfo] = useState(false);
 
+  const [userData, setUserData] = useState<FormData>({
+    username: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+  const location = useLocation();
   // Fetch data from the API when the component mounts
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Set loading state to true before fetching data
+      setLoading(true);
       try {
-        // Fetch data from the API
         const response = await apiclint.get("/games");
-        setData(response.data.results); // Update data state with the fetched data
+        // console.log(response)
+        setData(response.data.results);
+        setError(null);
       } catch (error) {
-        setError(error); // Set error state if there's an error during data fetching
+        setError(error);
+        setData([]); // Clear data in case of error
       } finally {
-        setLoading(false); // Set loading state to false after data fetching completes
+        setLoading(false);
       }
     };
 
-    fetchData(); // Call the fetchData function
+    fetchData();
+  }, []); // Empty dependency array to run the effect only once on mount
+  useEffect(() => {
+    const applyFilters = () => {
+      let updatedData = [...data];
 
-    // Cleanup function (not implemented for now)
-    return () => {
-      // This function can be used for cleanup tasks when the component unmounts
+      // Filter by search query
+      updatedData = updatedData.filter((game) =>
+        game.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      // Filter by genre
+      if (selectedGenre) {
+        updatedData = updatedData.filter((game) =>
+          Object.values(game.genres).some(
+            (genreObj) => genreObj.slug === selectedGenre
+          )
+        );
+      }
+      // Filter by platform
+      if (selectedPlatform) {
+        updatedData = updatedData.filter((game) =>
+          Object.values(game.parent_platforms).some(
+            (platformObj) => platformObj.platform.slug === selectedPlatform
+          )
+        );
+      }
+      setFilteredData(updatedData);
     };
-  }, []);
+
+    applyFilters();
+  }, [data, searchQuery, selectedGenre, selectedPlatform]);
+
+
 
   return (
-    <Router>
       <Grid
         templateAreas={{
           base: `"nav" "main"`,
@@ -70,13 +113,20 @@ export function App() {
         }}
       >
         <GridItem area="nav">
-          <NavBar />
+          <NavBar
+            setSearchQuery={setSearchQuery}
+            filterByGenre={setSelectedGenre}
+            filterByPlatform={setSelectedPlatform}
+            userData={userData} isLoggedIn={isLoggedIn} 
+            handleLogout={function (): void {
+              throw new Error("Function not implemented.");
+            } }          />
         </GridItem>
         <Show above="lg">
           <GridItem area="aside">
             {location.pathname !== "/login" &&
               location.pathname !== "/register" && (
-                <GenreList genres={genres} />
+                <GenreList genres={genres} filterByGenre={setSelectedGenre} />
               )}
           </GridItem>
         </Show>
@@ -86,14 +136,17 @@ export function App() {
             <Route
               path="/"
               element={
-                <GamesBody games={data} isLoading={isLoading} error={error} />
+                <GamesBody
+                  games={filteredData}
+                  isLoading={isLoading}
+                  error={error}
+                />
               }
             />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setUserData={setUserData} setLoginInfo={setLoginInfo}/>} />
             <Route path="/register" element={<Register />} />
           </Routes>
         </GridItem>
       </Grid>
-    </Router>
   );
 }

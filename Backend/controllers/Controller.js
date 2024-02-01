@@ -67,30 +67,41 @@ const register = [
   }
  ];
 
-const login = async (req, res) => {
+ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Check if the user exists and verify password
     const userExist = await User.findOne({ email: email });
 
     if (!userExist) {
-      return res.json({ msg: "invalid credentials" });
+      return res.status(401).json({ msg: "Invalid credentials" });
     }
 
-    const isPassvalid = await userExist.comparePassword(password);
+    const isPassValid = await userExist.comparePassword(password);
 
-    if (!isPassvalid) {
-      return res.json({ msg: "invalid login password" });
-    } else {
-      res.status(200).json({
-        msg: "Login Succesfully",
-        Token: await userExist.generateToken(),
-        userId: userExist._id.toString(),
-      });
+    if (!isPassValid) {
+      return res.status(401).json({ msg: "Invalid login password" });
     }
+
+    // Generate token
+    const token = await userExist.generateToken();
+
+    // Send token and user information in response
+    res.status(200).json({
+      token: token,
+      user: {
+        username: userExist.username,
+        email: userExist.email,
+        phone: userExist.phone,
+      },
+    });
+    console.log(userExist)
   } catch (error) {
-    console.log("Internal Server Error");
+    console.error("Login Error:", error);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 };
+
 
 module.exports = { home, register, login };

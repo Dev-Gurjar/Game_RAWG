@@ -1,5 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'; 
 import {
   Flex,
   Heading,
@@ -42,6 +43,8 @@ const Register = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -58,6 +61,7 @@ const Register = () => {
         formData
       );
       console.log("Response:", response.data);
+      navigate("/")
       setModalMessage("Registration Successful");
       setIsSuccessModalOpen(true);
     } catch (error: any) {
@@ -85,8 +89,8 @@ const Register = () => {
   return (
     <Flex
       flexDirection="column"
-      width="90vw"
-      height="100vh"
+      width="100vw"
+      height="85vh"
       backgroundColor="gray.900"
       justifyContent="center"
       alignItems="center"

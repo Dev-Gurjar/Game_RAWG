@@ -1,5 +1,7 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
+import { FormData } from "./Register";
+import { useNavigate } from 'react-router-dom'; 
 import {
   Flex,
   Heading,
@@ -33,12 +35,32 @@ interface LoginData {
   password: string;
 }
 
-const Login = () => {
+interface SetUserDataFunction {
+  (userData: { username: string; email: string; phone: string; password: string }): void;
+}
+interface Prop{
+  setUserData: SetUserDataFunction;
+  setLoginInfo: (loginInfo : boolean) => void;
+}
+
+const Login = ({setUserData, setLoginInfo}:Prop) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState<LoginData>({
     email: "",
     password: "",
   });
+  const navigate = useNavigate(); 
+  const fitUser = (user: FormData | null) => {
+    if (user) {
+      setUserData({
+        username: user.username,
+        email: user.email,
+        phone: user.phone,
+        password: "xConfidntialx",
+      });
+    }
+  };
+
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -52,16 +74,28 @@ const Login = () => {
         "http://localhost:3000/login",
         loginData
       );
-      console.log("Response:", response.data);
-      setModalMessage(response.data.msg);
-      setIsSuccessModalOpen(true);
+      const { token, user } = response.data;
+      fitUser(user);
+      setLoginInfo(true);
+      navigate('/'); 
+      
+      // Store token and user information in local storage or session cookie
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      
+      console.log(response)
+      console.log("Logged in as:", user.username);
+      console.log("Email:", user.email);
+      console.log("Phone:", user.phone);
+  
+      // Redirect or perform other actions as needed
     } catch (error: any) {
       console.error("Login Error:", error.response.data.msg);
+      setLoginInfo(false);
       setModalMessage(error.response.data.msg);
       setIsErrorModalOpen(true);
     }
   };
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setLoginData({
@@ -69,6 +103,17 @@ const Login = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userString = localStorage.getItem("user");
+    if (token && userString) {
+      const user = JSON.parse(userString);
+      fitUser(user);
+      setLoginInfo(true);
+      navigate('/');
+    }
+  }, []); 
 
   const closeModal = () => {
     setIsSuccessModalOpen(false);
@@ -78,8 +123,8 @@ const Login = () => {
   return (
     <Flex
       flexDirection="column"
-      width="90vw"
-      height="100vh"
+      width="100vw"
+      height="85vh"
       backgroundColor="gray.900"
       justifyContent="center"
       alignItems="center"
@@ -91,7 +136,7 @@ const Login = () => {
         alignItems="center"
       >
         <Avatar bg="teal.500" />
-        <Heading color="teal.300">Welcome</Heading>
+        <Heading color="teal.300">Welcome, </Heading>
         <Box minW={{ base: "90%", md: "468px" }}>
           <form onSubmit={handleSubmit}>
             <Stack
