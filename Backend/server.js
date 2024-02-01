@@ -13,7 +13,7 @@ const xcatatoryroute = require("./routers/x-Catagories");
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: ['http://172.31.47.98:5000',"https://deploy-mern-1whq.vercel.app"],
+  origin: ['http://localhost:5173',"https://deploy-mern-1whq.vercel.app"],
   methods:["POST","GET"],
   credentials: true
  }));
@@ -23,9 +23,9 @@ app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
 PORT = 3000;
-const localIpAddress = "172.31.47.98";
+// const localIpAddress = "172.31.47.98";
 ConnectDB().then(() => {
-  app.listen(PORT,localIpAddress, () => {
+  app.listen(PORT, () => {
     console.log(`Server has Started at ${PORT}`);
   });
 });
