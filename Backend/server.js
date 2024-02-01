@@ -13,7 +13,7 @@ const xcatatoryroute = require("./routers/x-Catagories");
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'http://172.31.47.98:5000',
   credentials: true
  }));
 
@@ -22,9 +22,9 @@ app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
 PORT = 3000;
-// const localIpAddress = "172.31.47.98";
+const localIpAddress = "172.31.47.98";
 ConnectDB().then(() => {
-  app.listen(PORT, () => {
+  app.listen(PORT,localIpAddress, () => {
     console.log(`Server has Started at ${PORT}`);
   });
 });

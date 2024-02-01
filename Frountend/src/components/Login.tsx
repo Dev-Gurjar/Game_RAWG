@@ -71,7 +71,7 @@ const Login = ({setUserData, setLoginInfo}:Prop) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/login",
+        "http://172.31.47.98:3000/login",
         loginData
       );
       const { token, user } = response.data;
@@ -90,9 +90,9 @@ const Login = ({setUserData, setLoginInfo}:Prop) => {
   
       // Redirect or perform other actions as needed
     } catch (error: any) {
-      console.error("Login Error:", error.response.data.msg);
+      console.error("Login Error:", error.response.data);
       setLoginInfo(false);
-      setModalMessage(error.response.data.msg);
+      setModalMessage(error.response.data);
       setIsErrorModalOpen(true);
     }
   };
