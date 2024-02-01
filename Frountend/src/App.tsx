@@ -28,12 +28,10 @@ export interface Game {
   name: string;
   background_image: string;
   parent_platforms: { platform: Platform }[];
-  genres: Genre [];
+  genres: Genre[];
   metacritic: number;
   rating_top: number;
 }
-
-
 
 export function App() {
   // State variables to hold data and loading/error states
@@ -103,50 +101,54 @@ export function App() {
     applyFilters();
   }, [data, searchQuery, selectedGenre, selectedPlatform]);
 
-
-
   return (
-      <Grid
-        templateAreas={{
-          base: `"nav" "main"`,
-          lg: `"nav nav" "aside main"`,
-        }}
-      >
-        <GridItem area="nav">
-          <NavBar
-            setSearchQuery={setSearchQuery}
-            filterByGenre={setSelectedGenre}
-            filterByPlatform={setSelectedPlatform}
-            userData={userData} isLoggedIn={isLoggedIn} 
-            handleLogout={function (): void {
-              throw new Error("Function not implemented.");
-            } }          />
+    <Grid
+      templateAreas={{
+        base: `"nav" "main"`,
+        lg: `"nav nav" "aside main"`,
+      }}
+    >
+      <GridItem area="nav">
+        <NavBar
+          setSearchQuery={setSearchQuery}
+          filterByGenre={setSelectedGenre}
+          filterByPlatform={setSelectedPlatform}
+          userData={userData}
+          isLoggedIn={isLoggedIn}
+          setLoginInfo={setLoginInfo} 
+          setUserData={setUserData}
+        />
+      </GridItem>
+      <Show above="lg">
+        <GridItem area="aside">
+          {location.pathname !== "/login" &&
+            location.pathname !== "/register" && (
+              <GenreList genres={genres} filterByGenre={setSelectedGenre} />
+            )}
         </GridItem>
-        <Show above="lg">
-          <GridItem area="aside">
-            {location.pathname !== "/login" &&
-              location.pathname !== "/register" && (
-                <GenreList genres={genres} filterByGenre={setSelectedGenre} />
-              )}
-          </GridItem>
-        </Show>
-        <GridItem area="main">
-          {/* Define routes */}
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <GamesBody
-                  games={filteredData}
-                  isLoading={isLoading}
-                  error={error}
-                />
-              }
-            />
-            <Route path="/login" element={<Login setUserData={setUserData} setLoginInfo={setLoginInfo}/>} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </GridItem>
-      </Grid>
+      </Show>
+      <GridItem area="main">
+        {/* Define routes */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <GamesBody
+                games={filteredData}
+                isLoading={isLoading}
+                error={error}
+              />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Login setUserData={setUserData} setLoginInfo={setLoginInfo} />
+            }
+          />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </GridItem>
+    </Grid>
   );
 }

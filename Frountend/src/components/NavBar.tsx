@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Button,
   HStack,
@@ -45,13 +45,22 @@ import platforms from "../data/platforms";
 import ModeChanger from "./ModeChanger";
 import { FormData } from "./Register";
 
+interface SetUserDataFunction {
+  (userData: {
+    username: string;
+    email: string;
+    phone: string;
+    password: string;
+  }): void;
+}
 interface Props {
+  setUserData: SetUserDataFunction;
   setSearchQuery: (query: string) => void;
   filterByGenre: (genre: string) => void;
   filterByPlatform: (platform: string) => void;
   isLoggedIn: boolean;
   userData: FormData | null;
-  handleLogout: () => void;
+  setLoginInfo: (isLoggedIn: boolean) => void;
 }
 
 const NavBar = ({
@@ -60,10 +69,12 @@ const NavBar = ({
   filterByPlatform,
   isLoggedIn,
   userData,
-  handleLogout,
+  setLoginInfo,
+  setUserData,
 }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSearchQueryChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -79,6 +90,22 @@ const NavBar = ({
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     filterByPlatform(event.target.value);
+  };
+
+  const handleLogout = () => {
+    // Clear the user's authentication state
+    setLoginInfo(false); // Update the isLoggedIn state to false
+    setUserData({
+      // Clear the user data
+      username: "",
+      email: "",
+      phone: "",
+      password: "",
+    });
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/");
   };
 
   return (
@@ -123,9 +150,11 @@ const NavBar = ({
               <Heading as="h3" size="md" color="teal.300">
                 Welcome,{" "}
               </Heading>
-              <Popover >
+              <Popover>
                 <PopoverTrigger>
-                <Button colorScheme="purple" variant="outline">{userData?.username || "whoareyou"}!</Button>
+                  <Button colorScheme="purple" variant="outline">
+                    {userData?.username || "whoareyou"}!
+                  </Button>
                 </PopoverTrigger>
                 <PopoverContent width="400px">
                   <PopoverArrow />
@@ -140,9 +169,11 @@ const NavBar = ({
                           You are tokenized | you can refresh
                         </TableCaption>
                         <Thead>
-                          <Tr >
+                          <Tr>
                             <Th fontSize={16}>Name </Th>
-                            <Th fontSize={16}>{userData?.username || "whoareyou"}</Th>
+                            <Th fontSize={16}>
+                              {userData?.username || "whoareyou"}
+                            </Th>
                           </Tr>
                         </Thead>
                         <Tbody>
@@ -159,8 +190,7 @@ const NavBar = ({
                             <Td>{userData?.password || "whoareyou"}</Td>
                           </Tr>
                         </Tbody>
-                        <Tfoot>
-                        </Tfoot>
+                        <Tfoot></Tfoot>
                       </Table>
                     </TableContainer>
                   </PopoverBody>

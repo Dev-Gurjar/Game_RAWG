@@ -40,7 +40,7 @@ interface SetUserDataFunction {
 }
 interface Prop{
   setUserData: SetUserDataFunction;
-  setLoginInfo: (loginInfo : boolean) => void;
+  setLoginInfo: (isLoggedIn : boolean) => void;
 }
 
 const Login = ({setUserData, setLoginInfo}:Prop) => {
