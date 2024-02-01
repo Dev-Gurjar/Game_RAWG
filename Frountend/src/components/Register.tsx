@@ -57,11 +57,11 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/register",
+        "http://172.31.47.98:3000/register",
         formData
       );
       console.log("Response:", response.data);
-      navigate("/")
+      navigate("/login")
       setModalMessage("Registration Successful");
       setIsSuccessModalOpen(true);
     } catch (error: any) {

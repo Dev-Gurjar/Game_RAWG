@@ -90,9 +90,9 @@ const Login = ({setUserData, setLoginInfo}:Prop) => {
   
       // Redirect or perform other actions as needed
     } catch (error: any) {
-      console.error("Login Error:", error.response.data);
+      console.error("Login Error:", error.response.data.msg);
       setLoginInfo(false);
-      setModalMessage(error.response.data);
+      setModalMessage(error.response.data.msg);
       setIsErrorModalOpen(true);
     }
   };
