@@ -1,8 +1,8 @@
-require("dotenv").config();
+require('dotenv').config();
 const express = require("express");
 const cors = require('cors');
 
-
+// console.log(process.env)
 const app = express();
 
 const ConnectDB = require("./utils/db");
@@ -13,7 +13,8 @@ const xcatatoryroute = require("./routers/x-Catagories");
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: 'http://172.31.47.98:5000',
+  origin: ['http://172.31.47.98:5000',"https://deploy-mern-1whq.vercel.app"],
+  methods:["POST","GET"],
   credentials: true
  }));
 
