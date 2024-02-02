@@ -24,12 +24,12 @@ app.use("/", xcatatoryroute);
 
 PORT = 3000;
 // const localIpAddress = "172.31.47.98";
+
+app.get("/", (req, res) => {
+  res.send("Chal jayega bhai");
+});
 ConnectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Server has Started at ${PORT}`);
   });
-});
-
-app.get("/", (req, res) => {
-  res.send("Chal jayega bhai");
 });
