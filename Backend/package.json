@@ -4,7 +4,7 @@
   "description": "Ab to gamd phad denge",
   "main": "index.js",
   "scripts": {
-    "gandu": "nodemon server.js"
+    "gandu": "node server.js"
   },
   "author": "",
   "license": "ISC",
