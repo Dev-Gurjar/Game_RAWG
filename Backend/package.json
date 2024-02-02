@@ -4,7 +4,8 @@
   "description": "Ab to gamd phad denge",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js",
+    "build": "node app.js"
   },
   "author": "",
   "license": "ISC",

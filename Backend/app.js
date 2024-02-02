@@ -11,9 +11,9 @@ const xhomeroute = require("./routers/x-Home");
 const xcatatoryroute = require("./routers/x-Catagories");
 
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 app.use(cors({
-  origin: ['http://172.31.47.98:5000',"https://deploy-mern-1whq.vercel.app"],
+  origin: ['http://172.31.47.98:5000',"https://game-rawg-iota.vercel.app"],
   methods:["POST","GET"],
   credentials: true
  }));
@@ -22,7 +22,7 @@ app.use("/", routes);
 app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
-PORT = 3000;
+const PORT = process.env.PORT || 8000;
 // const localIpAddress = "172.31.47.98";
 
 app.get("/", (req, res) => {
