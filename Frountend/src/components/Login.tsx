@@ -71,7 +71,7 @@ const Login = ({setUserData, setLoginInfo}:Prop) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/login",
+        "http://172.31.47.98:3000/login",
         loginData
       );
       const { token, user } = response.data;

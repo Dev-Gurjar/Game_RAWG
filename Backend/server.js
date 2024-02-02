@@ -13,7 +13,7 @@ const xcatatoryroute = require("./routers/x-Catagories");
 app.use(express.json());
 app.use(cors());
 app.use(cors({
-  origin: ['http://localhost:5173',"https://deploy-mern-1whq.vercel.app"],
+  origin: ['http://172.31.47.98:5000',"https://deploy-mern-1whq.vercel.app"],
   methods:["POST","GET"],
   credentials: true
  }));
