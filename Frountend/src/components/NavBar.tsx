@@ -117,7 +117,7 @@ const NavBar = ({
         display={{ base: "none", md: "flex" }}
       >
         <Link to="/">
-          <Image src={icon} boxSize="80px" />
+          <Image src={icon} boxSize="81px" />
         </Link>
 
         {location.pathname !== "/login" &&
