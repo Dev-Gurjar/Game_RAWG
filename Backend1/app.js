@@ -15,5 +15,5 @@ app.get("/", (req, res) => {
     });
   });
   app.post('/login', (req, res) => {
-    res.send('About route 🎉 ');
+    res.send('login route 🎉 ');
   });
