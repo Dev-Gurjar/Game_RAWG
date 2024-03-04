@@ -71,7 +71,7 @@ const Login = ({setUserData, setLoginInfo}:Prop) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://172.31.47.98:3000/login",
+        "https://game-rawg-1.onrender.com/login",
         loginData
       );
       const { token, user } = response.data;

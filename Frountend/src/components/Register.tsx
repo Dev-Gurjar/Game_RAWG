@@ -57,7 +57,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://172.31.47.98:3000/register",
+        "https://game-rawg-1.onrender.com/register",
         formData
       );
       console.log("Response:", response.data);

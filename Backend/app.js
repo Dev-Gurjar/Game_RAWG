@@ -22,7 +22,7 @@ app.use("/", routes);
 app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 1000;
 // const localIpAddress = "172.31.47.98";
 
 app.get("/", (req, res) => {
