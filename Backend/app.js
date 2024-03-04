@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require('cors');
 
 // console.log(process.env)
@@ -22,15 +23,22 @@ app.use("/", routes);
 app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 10000;
 // const localIpAddress = "172.31.47.98";
 
 app.get("/", (req, res) => {
   console.log("regester");
   res.send("Chal jayega bhai");
 });
-ConnectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Server has Started at ${port}`);
-  });
-});
+
+
+const PORT = process.env.PORT || 5000;
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on ${PORT}`);
+    });
+  })
+  .catch((err) => console.log(err));
+
