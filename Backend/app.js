@@ -13,7 +13,7 @@ const xcatatoryroute = require("./routers/x-Catagories");
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://172.31.47.98:5000',"https://game-rawg-iota.vercel.app"],
+  origin: ['http://172.31.47.98:5000',"https://Game_RAWG-2.onrender.com"],
   methods:["POST","GET"],
   credentials: true
  }));
@@ -22,7 +22,7 @@ app.use("/", routes);
 app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 // const localIpAddress = "172.31.47.98";
 
 app.get("/", (req, res) => {
