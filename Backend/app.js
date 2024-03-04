@@ -22,14 +22,14 @@ app.use("/", routes);
 app.use("/", xhomeroute);
 app.use("/", xcatatoryroute);
 
-const PORT = 3000;
+const port = process.env.PORT || 4000;
 // const localIpAddress = "172.31.47.98";
 
 app.get("/", (req, res) => {
   res.send("Chal jayega bhai");
 });
 ConnectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server has Started at ${PORT}`);
+  app.listen(port, () => {
+    console.log(`Server has Started at ${port}`);
   });
 });
