@@ -42,7 +42,7 @@ const register = [
        });
      } catch (error) {
        console.error(error);
-       res.status(500).json({ msg: "Internal server error" });
+       res.status(500).json({ msg: "Internal server error." });
      }
   }
  ];
