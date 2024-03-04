@@ -13,7 +13,7 @@ const xcatatoryroute = require("./routers/x-Catagories");
 app.use(express.json());
 
 app.use(cors({
-  origin: ['http://172.31.47.98:5000',"https://game-rawg-2.onrender.com"],
+  origin: ['http://172.31.47.98:5000',"https://game-rawg.onrender.com"],
   methods:["POST","GET"],
   credentials: true
  }));
