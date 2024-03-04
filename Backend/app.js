@@ -26,6 +26,7 @@ const port = process.env.PORT || 4000;
 // const localIpAddress = "172.31.47.98";
 
 app.get("/", (req, res) => {
+  console.log("regester");
   res.send("Chal jayega bhai");
 });
 ConnectDB().then(() => {
